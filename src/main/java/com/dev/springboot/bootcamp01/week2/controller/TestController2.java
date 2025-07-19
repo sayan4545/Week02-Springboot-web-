@@ -1,13 +1,20 @@
 package com.dev.springboot.bootcamp01.week2.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.validation.DataBinder;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 public class TestController2 {
+
+    @Autowired
+    private FnEditor fnEditor;
+
+    @InitBinder
+    protected void initBinder(DataBinder dataBinder){
+        dataBinder.registerCustomEditor(String.class, "fn", fnEditor);
+    }
 
     @RequestMapping(value = "/fetchUser", method = RequestMethod.GET)
     @ResponseBody
@@ -19,6 +26,19 @@ public class TestController2 {
     @ResponseBody
     public String fetchUserFromPost(){
         return "user from post method";
+    }
+    @GetMapping("/fetch2")
+    @ResponseBody
+    public String getuser(@RequestParam String fn,
+                          @RequestParam String ln,
+                          @RequestParam int age){
+        return "fetching firstName "+ fn +" lastname "+ ln+" age: "+age;
+    }
+
+    @GetMapping("/fetch3/{id}")
+    @ResponseBody
+    public String fetchId(@PathVariable String id){
+        return "fetched id is : "+ id;
     }
 
 
